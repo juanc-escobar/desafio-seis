@@ -14,15 +14,13 @@ class Jean {
 
 // Declaracion de variables 
 
-const productos = []
-let carrito = []
-let totalCompra = 0
-let itemsCarrito = 0
-
+const productos = [];
+let carrito = [];
+let totalCompra = 0;
+let itemsCarrito = 0;
 
 window.localStorage.removeItem("carritoStorage")
 window.localStorage.removeItem("totalCompraStorage")
-
 
 // Creacion de objetos y envio de objetos a el arreglo de productos. 
 
@@ -32,33 +30,34 @@ const jeanWidefit = new Jean (3,"jeans","Jean Widefit","Jean comodo widefit colo
 
 productos.push(jeanSlimfit, jeanRegularfit, jeanWidefit)
 
+const copyProductos = [...productos]; // Sugar Syntax Spread Operator (se realiza una copia del array productos para evitar modificar los productos originales de  la "base de datos")
+
 // Creacion de contenedores principales 
 
 const cardConntenedor = document.getElementById("card-contenedor")
 const facturaConntenedor = document.getElementById("factura-contenedor")
-const cart = document.getElementById("cart")
+const cartConntenerdor = document.getElementById("cart")
 
 // se crean un algoritmo para mostrar los productos y un event listener con click sobre el boton agregar. 
 
-productos.forEach((producto) => {
+copyProductos.forEach((producto) => {
+    let {id,titulo, descripcion, precio,img} = producto // Sugar Syntax Desestructuracion 
     const mostrarProductos = document.createElement("div")
     mostrarProductos.classList.add("card")
     mostrarProductos.innerHTML = `
-    <img class="card__img" src="${producto.img}" alt="" />
-    <h3 class="card__titulo">${producto.titulo}</h3>
-    <p class="card__descripcion">${producto.descripcion}</p>
-    <p class="card__precio">$ ${producto.precio}</p>
-    <button id="${producto.id}" class="card__btn">Agregar</button>
+    <img class="card__img" src="${img}" alt="" />
+    <h3 class="card__titulo">${titulo}</h3>
+    <p class="card__descripcion">${descripcion}</p>
+    <p class="card__precio">$ ${precio}</p>
+    <button id="${id}" class="card__btn">Agregar</button>
     `
     cardConntenedor.appendChild(mostrarProductos)
 
-    const agregar = document.getElementById(producto.id)
-
+    const agregar = document.getElementById(id)
     agregar.addEventListener("click", () => {
-    agregarCarrito(producto.id)
+    agregarCarrito(id)
     })
 })
-
 
 // se crea una funcion para mostrat el contador de productos en el carrito. 
 
@@ -73,9 +72,9 @@ const actualizarCarrito = () => {
 // se crea una funcion para agregar los productos al carrito y evitar duplicados. 
 
 const agregarCarrito = (productoId) => {
-    let productoSeleccionado = productos.find((p) => p.id === productoId)
+    let productoSeleccionado = copyProductos.find((p) => p.id === productoId)
     if (carrito.find((p)=> p.id === productoSeleccionado.id)){
-        productoSeleccionado.cart = productoSeleccionado.cart + 1
+        productoSeleccionado.cart++ // Sugar Syntax Optimizacion ++
         totalCompra = totalCompra + productoSeleccionado.precio
         itemsCarrito= carrito.reduce((acumulator, actual) => {
             return acumulator + actual.cart;

@@ -1,10 +1,10 @@
-
 // se selecciona elementos del dom para visualizacion, y se traen del storage el total compra y los productos del carrito.
 
 const facturaConntenedor = document.getElementById("factura-contenedor")
-
 let carrito = JSON.parse(window.localStorage.getItem("carritoStorage"))
 let totalCompra = JSON.parse(window.localStorage.getItem("totalCompraStorage"))
+
+totalCompra > 0 ? alert("estos son tus productos:") : alert("el carrito esta vacio.") // Sugar Syntax Tenary Operator
 
 // se crea una funcion para mostrar los productos seleccionados totales 
 
@@ -15,13 +15,14 @@ const reciboCompra = () => {
     articulosCarrito.innerHTML = `Articulos Seleccionados`
     facturaConntenedor.appendChild(articulosCarrito)
     carrito.forEach((producto) => {
+        let {titulo, precio,img,cart} = producto // Sugar Syntax Desestructuracion 
         const div = document.createElement("div")
         div.classList.add("factura")
         div.innerHTML = `
-        <img src="${producto.img}" alt="producto" class="factura__img">
-        <h3 class="factura-titulo">${producto.titulo}</h3>
-        <p id="contador" class="factura__cantidad">Cantidad: ${producto.cart}</p>
-        <p class="factura__precio">Valor Unidad: $ ${producto.precio}</p>
+        <img src="${img}" alt="producto" class="factura__img">
+        <h3 class="factura-titulo">${titulo}</h3>
+        <p id="contador" class="factura__cantidad">Cantidad: ${cart}</p>
+        <p class="factura__precio">Valor Unidad: $ ${precio}</p>
             `
         facturaConntenedor.appendChild(div)
     })
